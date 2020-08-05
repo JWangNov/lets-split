@@ -1,2 +1,2 @@
-# lets split
- Bill Splitting System
+# Let's Split
+Bill Splitting System

@@ -1,2 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Denote generated files
+mvnw linguist-generated=true
+mvnw.cmd linguist-generated=true
+
+# Denote document path
+document/* linguist-documentation
