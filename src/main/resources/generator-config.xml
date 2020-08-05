@@ -5,17 +5,19 @@
 
 <generatorConfiguration>
     <properties resource="generator.properties"/>
+
     <context id="MySqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
         <property name="javaFileEncoding" value="UTF-8"/>
 
+        <!--<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin"/>-->
         <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
         <!--this is to overwrite existing xml files-->
-        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!--<plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>-->
 
-        <commentGenerator type="com.jw.letssplit.mbg.CommentGenerator">
+        <commentGenerator>
             <property name="suppressAllComments" value="true"/>
             <property name="suppressDate" value="true"/>
             <property name="addRemarkComments" value="true"/>
@@ -28,10 +30,22 @@
             <property name="nullCatalogMeansCurrent" value="true"/>
         </jdbcConnection>
 
-        <javaModelGenerator targetPackage="com.jw.letssplit.mbg.model" targetProject="src/main/java"/>
-        <sqlMapGenerator targetPackage="com.jw.letssplit.mbg.mapper" targetProject="src/main/resources"/>
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.jw.letssplit.mbg.mapper"
-                             targetProject="src/main/java"/>
+        <javaModelGenerator targetPackage="com.jw.letssplit.po"
+                            targetProject="src/main/java">
+            <!--<property name="enableSubPackages" value="false"/>-->
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources">
+            <!--<property name="enableSubPackages" value="false"/>-->
+        </sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.jw.letssplit.dao"
+                             targetProject="src/main/java"
+                             type="XMLMAPPER">
+            <!--<property name="enableSubPackages" value="false"/>-->
+        </javaClientGenerator>
 
         <table tableName="bill">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
