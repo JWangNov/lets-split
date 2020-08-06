@@ -14,9 +14,7 @@ public interface UserService {
 
     void deleteUser(List<Integer> ids);
 
-    int createUser(String username);
+    int createUser(User user);
 
-    int renameUser(Integer id, String username);
-
-    int updateUser(Integer id, User newUser);
+    int updateUser(Integer id, User user);
 }
