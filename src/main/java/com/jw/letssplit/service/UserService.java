@@ -1,26 +1,22 @@
 package com.jw.letssplit.service;
 
+import com.jw.letssplit.po.User;
+
 import java.util.List;
 
 public interface UserService {
 
-    /**
-     * delete a user by its id
-     */
-    void delete(Integer id);
+    List<User> listAllUser();
 
-    /**
-     * delete users
-     */
-    void delete(List<Integer> ids);
+    User getUser(Integer id);
 
-    /**
-     * create a user
-     */
-    void create(String username);
+    int deleteUser(Integer id);
 
-    /**
-     * rename a user's name
-     */
-    void rename(Integer id, String username);
+    void deleteUser(List<Integer> ids);
+
+    int createUser(String username);
+
+    int renameUser(Integer id, String username);
+
+    int updateUser(Integer id, User newUser);
 }
