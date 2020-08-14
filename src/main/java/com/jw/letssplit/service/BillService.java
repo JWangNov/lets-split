@@ -8,7 +8,9 @@ public interface BillService {
 
     List<Bill> listAllBill();
 
-    List<Bill> listBillOfAUser(Integer userId);
+    List<Bill> listBillOfUser(Integer userId);
+
+    List<Bill> listUnpaidBillOfUser(Integer userId);
 
     Bill getBill(Integer id);
 
