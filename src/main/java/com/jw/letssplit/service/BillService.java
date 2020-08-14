@@ -4,6 +4,11 @@ import com.jw.letssplit.po.Bill;
 
 import java.util.List;
 
+/**
+ * User ID: {@link Integer}
+ * <p>
+ * Bill ID: {@link Long}
+ */
 public interface BillService {
 
     List<Bill> listAllBill();
@@ -12,13 +17,13 @@ public interface BillService {
 
     List<Bill> listUnpaidBillOfUser(Integer userId);
 
-    Bill getBill(Integer id);
+    Bill getBill(Long id);
 
-    int deleteBill(Integer id);
+    int deleteBill(Long id);
 
-    void deleteBill(List<Integer> ids);
+    void deleteBill(List<Long> ids);
 
     int createBill(Bill bill);
 
-    int updateBill(Integer id, Bill bill);
+    int updateBill(Long id, Bill bill);
 }
