@@ -37,6 +37,7 @@ public class UserController {
     @GetMapping("/list")
     @ResponseBody
     public CommonResult<List<User>> listAllUser() {
+        log.info("[listAllUser][success]");
         return CommonResult.success(userService.listAllUser());
     }
 
