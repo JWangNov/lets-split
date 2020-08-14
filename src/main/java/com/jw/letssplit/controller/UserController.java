@@ -25,10 +25,11 @@ public class UserController {
     @ApiOperation(value = "create a new user")
     @PostMapping("/create")
     @ResponseBody
-    public CommonResult<User> create(@RequestBody String username) {
+    public CommonResult<User> createUser(@RequestBody String username) {
         User user = new User();
         user.setUsername(username);
-        userService.createUser(user);
+        int id = userService.createUser(user);
+        log.info("[createUser][success, username {}, id {}]", username, id);
         return CommonResult.success(user);
     }
 
@@ -37,5 +38,31 @@ public class UserController {
     @ResponseBody
     public CommonResult<List<User>> listAllUser() {
         return CommonResult.success(userService.listAllUser());
+    }
+
+    @ApiOperation(value = "rename a user")
+    @PostMapping("/rename")
+    @ResponseBody
+    public CommonResult<User> renameUser(@RequestBody User user) {
+        int count = userService.updateUser(user.getId(), user);
+        if (count != 1) {
+            log.error("[renameUser][failed, cannot find user id: {}]", user.getId());
+            return CommonResult.failed("user not found");
+        }
+        log.info("[renameUser][success, id: {}]", user.getId());
+        return CommonResult.success(user);
+    }
+
+    @ApiOperation(value = "delete a user")
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public CommonResult<Object> deleteUser(@PathVariable("id") Integer id) {
+        int count = userService.deleteUser(id);
+        if (count != 1) {
+            log.error("[deleteUser][failed, cannot find user id: {}]", id);
+            return CommonResult.failed("user not found");
+        }
+        log.info("[deleteUser][success, id: {}]", id);
+        return CommonResult.success(null);
     }
 }
