@@ -1,6 +1,7 @@
 package com.jw.letssplit.controller;
 
-import com.jw.letssplit.common.BillMultiInputData;
+import com.jw.letssplit.common.BillCreateMultiInputData;
+import com.jw.letssplit.common.BillPayMultiInputData;
 import com.jw.letssplit.common.CommonResult;
 import com.jw.letssplit.po.Bill;
 import com.jw.letssplit.po.User;
@@ -105,7 +106,7 @@ public class BillController {
     @ApiOperation(value = "create a bill with N payee & 1 payer")
     @PostMapping("/create/multi")
     @ResponseBody
-    public CommonResult<Object> createBillMulti(@RequestBody BillMultiInputData inputData) {
+    public CommonResult<Object> createBillMulti(@RequestBody BillCreateMultiInputData inputData) {
         Integer payerUid = inputData.getPayerUid();
         List<Integer> payeeUids = inputData.getPayeeUids();
         Double totalBalance = inputData.getTotalBalance();
@@ -146,6 +147,51 @@ public class BillController {
             billService.createBill(bill);
         }
         log.info("[createBillMulti][success]");
+        return CommonResult.success(null);
+    }
+
+    // pay bill ===============================================================
+
+    @ApiOperation(value = "fully pay 1 bill")
+    @PostMapping("/pay/single")
+    @ResponseBody
+    public CommonResult<Bill> payBillSingle(@RequestBody Long id) {
+        Bill bill = billService.getBill(id);
+        if (bill == null) {
+            log.error("[payBillSingle][failed, bill #{} not found]", id);
+            return CommonResult.failed("bill not found");
+        }
+        if (bill.getStatus()) {
+            log.error("[payBillSingle][failed, cannot repay a paid bill #{}]", id);
+            return CommonResult.failed("cannot repay a paid bill");
+        }
+        bill.setStatus(true);
+        bill.setDoneTime(new Date());
+        billService.updateBill(id, bill);
+        log.info("[payBillSingle][success, paid bill #{}]", id);
+        return CommonResult.success(bill);
+    }
+
+    @ApiOperation(value = "fully pay multi bills")
+    @PostMapping("/pay/multi")
+    @ResponseBody
+    public CommonResult<Object> payBillMulti(@RequestBody BillPayMultiInputData inputData) {
+        List<Long> ids = inputData.getIds().stream().distinct().collect(Collectors.toList());
+        for (var id : ids) {
+            Bill bill = billService.getBill(id);
+            if (bill == null) {
+                log.error("[payBillMulti][failed, bill #{} not found]", id);
+                return CommonResult.failed("bill not found");
+            }
+            if (bill.getStatus()) {
+                log.error("[payBillMulti][failed, cannot repay a paid bill #{}]", id);
+                return CommonResult.failed("cannot repay a paid bill");
+            }
+            bill.setStatus(true);
+            bill.setDoneTime(new Date());
+            billService.updateBill(id, bill);
+        }
+        log.info("[payBillMulti][success, paid bills: {}]", ids.toString());
         return CommonResult.success(null);
     }
 }
