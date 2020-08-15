@@ -1,12 +1,12 @@
 package com.jw.letssplit.controller;
 
-import com.jw.letssplit.common.BillCreateMultiInputData;
-import com.jw.letssplit.common.BillPayMultiInputData;
 import com.jw.letssplit.common.CommonResult;
 import com.jw.letssplit.po.Bill;
 import com.jw.letssplit.po.User;
 import com.jw.letssplit.service.BillService;
 import com.jw.letssplit.service.UserService;
+import com.jw.letssplit.vo.BillCreateMultiInputData;
+import com.jw.letssplit.vo.BillIdMultiInputData;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -175,7 +175,7 @@ public class BillController {
     @ApiOperation(value = "fully pay multi bills")
     @PostMapping("/pay/multi")
     @ResponseBody
-    public CommonResult<Object> payBillMulti(@RequestBody BillPayMultiInputData inputData) {
+    public CommonResult<Object> payBillMulti(@RequestBody BillIdMultiInputData inputData) {
         List<Long> ids = inputData.getIds().stream().distinct().collect(Collectors.toList());
         for (var id : ids) {
             Bill bill = billService.getBill(id);

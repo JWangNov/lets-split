@@ -1,4 +1,4 @@
-package com.jw.letssplit.common;
+package com.jw.letssplit.vo;
 
 import lombok.Data;
 
