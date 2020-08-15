@@ -25,9 +25,9 @@ DROP TABLE IF EXISTS `bill`;
 CREATE TABLE `bill`
 (
     `id`          bigint     NOT NULL AUTO_INCREMENT,
-    `uid`         int        NOT NULL COMMENT 'user id (who has this bill to pay)',
+    `uid`         int        NOT NULL COMMENT 'payee',
     `balance`     double     NOT NULL COMMENT 'in USD',
-    `paid_by_uid` int        NOT NULL COMMENT 'the user who paid this bill for the current user',
+    `paid_by_uid` int        NOT NULL COMMENT 'payer',
     `create_time` datetime   NOT NULL,
     `status`      tinyint(1) NOT NULL DEFAULT '0' COMMENT 'false - unpaid; true - paid',
     `done_time`   datetime            DEFAULT NULL,
@@ -90,4 +90,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
--- Dump completed on 2020-08-13 21:23:23
+-- Dump completed on 2020-08-14 21:58:07
