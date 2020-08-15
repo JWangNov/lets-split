@@ -1,5 +1,6 @@
 package com.jw.letssplit.controller;
 
+import com.jw.letssplit.common.BillMultiInputData;
 import com.jw.letssplit.common.CommonResult;
 import com.jw.letssplit.po.Bill;
 import com.jw.letssplit.po.User;
@@ -104,13 +105,13 @@ public class BillController {
     @ApiOperation(value = "create a bill with N payee & 1 payer")
     @PostMapping("/create/multi")
     @ResponseBody
-    public CommonResult<Object> createBillMulti(
-            @RequestBody Integer payerUid,
-            @RequestBody List<Integer> payeeUids,
-            @RequestBody Double totalBalance,
-            @RequestBody Boolean status,
-            @RequestBody String comment
-    ) {
+    public CommonResult<Object> createBillMulti(@RequestBody BillMultiInputData inputData) {
+        Integer payerUid = inputData.getPayerUid();
+        List<Integer> payeeUids = inputData.getPayeeUids();
+        Double totalBalance = inputData.getTotalBalance();
+        Boolean status = inputData.getStatus();
+        String comment = inputData.getComment();
+
         if (totalBalance < 0) {
             log.error("[createBillMulti][failed, balance should be >= 0, input balance: {}]", totalBalance);
             return CommonResult.failed("balance incorrect");
