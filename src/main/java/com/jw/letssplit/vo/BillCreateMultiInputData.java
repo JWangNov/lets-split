@@ -6,9 +6,9 @@ import java.util.List;
 
 @Data
 public class BillCreateMultiInputData {
-    Integer payerUid;
-    List<Integer> payeeUids;
-    Double totalBalance;
-    Boolean status;
-    String comment;
+    private Integer payerUid;
+    private List<Integer> payeeUids;
+    private Double totalBalance;
+    private Boolean status;
+    private String comment;
 }

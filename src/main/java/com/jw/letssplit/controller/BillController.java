@@ -195,7 +195,7 @@ public class BillController {
         return CommonResult.success(null);
     }
 
-    // other modify  bill =====================================================
+    // other modify bill =====================================================
 
     @ApiOperation(value = "delete a bill record")
     @GetMapping("/delete/{id}")
