@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Map;
 
 @Data
-public class BillStatementBrief {
+public class StatementBrief {
     private User owner;
     private Map<User, Double> payeeBalanceMap;
 }
