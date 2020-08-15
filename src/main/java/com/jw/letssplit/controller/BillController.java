@@ -194,4 +194,19 @@ public class BillController {
         log.info("[payBillMulti][success, paid bills: {}]", ids.toString());
         return CommonResult.success(null);
     }
+
+    // other modify  bill =====================================================
+
+    @ApiOperation(value = "delete a bill record")
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public CommonResult<Bill> deleteBill(@PathVariable("id") Long id) {
+        Bill bill = billService.getBill(id);
+        if (billService.deleteBill(id) != 1) {
+            log.error("[deleteBill][failed, bill #{} not found]", id);
+            return CommonResult.failed("bill not found");
+        }
+        log.info("[deleteBill][success, delete bill #{}]", id);
+        return CommonResult.success(bill);
+    }
 }
