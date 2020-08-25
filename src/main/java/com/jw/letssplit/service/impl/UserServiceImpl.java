@@ -7,6 +7,7 @@ import com.jw.letssplit.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -32,9 +33,16 @@ public class UserServiceImpl implements UserService {
         return userMapper.deleteByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public void deleteUser(List<Integer> ids) {
-        ids.forEach(this::deleteUser);
+        int count = 0;
+        for (Integer id : ids) {
+            count += userMapper.deleteByPrimaryKey(id);
+        }
+        if (count != ids.size()) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
