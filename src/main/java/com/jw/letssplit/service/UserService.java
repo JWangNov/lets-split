@@ -12,7 +12,7 @@ public interface UserService {
 
     int deleteUser(Integer id);
 
-    void deleteUser(List<Integer> ids);
+    int deleteUser(List<Integer> ids);
 
     int createUser(User user);
 

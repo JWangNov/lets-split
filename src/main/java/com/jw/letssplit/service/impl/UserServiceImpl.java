@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> listAllUser() {
+        log.info("[listAllUser][success]");
         return userMapper.selectByExample(new UserExample());
     }
 
@@ -28,31 +29,51 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public int deleteUser(Integer id) {
-        return userMapper.deleteByPrimaryKey(id);
+        int count = userMapper.deleteByPrimaryKey(id);
+        if (count != 1) {
+            log.error("[deleteUser][failed, cannot find user id: {}]", id);
+        } else {
+            log.info("[deleteUser][success, id: {}]", id);
+        }
+        return count;
     }
 
     @Transactional
     @Override
-    public void deleteUser(List<Integer> ids) {
+    public int deleteUser(List<Integer> ids) {
         int count = 0;
         for (Integer id : ids) {
             count += userMapper.deleteByPrimaryKey(id);
         }
         if (count != ids.size()) {
+            log.error("[deleteUser][failed, cannot find user]");
             throw new RuntimeException();
         }
+        log.info("[deleteUser][success]");
+        return count;
     }
 
+    @Transactional
     @Override
     public int createUser(User user) {
-        return userMapper.insertSelective(user);
+        int id = userMapper.insertSelective(user);
+        log.info("[createUser][success, id {}]", id);
+        return id;
     }
 
+    @Transactional
     @Override
     public int updateUser(Integer id, User user) {
         user.setId(id);
-        return userMapper.updateByPrimaryKeySelective(user);
+        int count = userMapper.updateByPrimaryKeySelective(user);
+        if (count != 1) {
+            log.error("[updateUser][failed, cannot find user id: {}]", id);
+        } else {
+            log.info("[updateUser][success, id: {}]", user.getId());
+        }
+        return count;
     }
 }
