@@ -37,7 +37,6 @@ public class BillController {
     @GetMapping("/list")
     @ResponseBody
     public CommonResult<List<Bill>> listAllBill() {
-        log.info("[listAllBill][success]");
         return CommonResult.success(billService.listAllBill());
     }
 
@@ -50,7 +49,6 @@ public class BillController {
             log.error("[listUserBill][failed, user not found, uid: {}]", uid);
             return CommonResult.failed("user not found");
         }
-        log.info("[listUserBill][success]");
         return CommonResult.success(billService.listBillOfUser(uid));
     }
 
@@ -63,7 +61,6 @@ public class BillController {
             log.error("[listUserBillUnpaid][failed, user not found, uid: {}]", uid);
             return CommonResult.failed("user not found");
         }
-        log.info("[listUserBillUnpaid][success]");
         return CommonResult.success(billService.listUnpaidBillOfUser(uid));
     }
 
@@ -99,7 +96,6 @@ public class BillController {
 
         long id = billService.createBill(bill);
         bill.setId(id);
-        log.info("[createBillSingle][success, create single bill, id: {}]", id);
         return CommonResult.success(bill);
     }
 
@@ -107,6 +103,7 @@ public class BillController {
     @PostMapping("/create/multi")
     @ResponseBody
     public CommonResult<Object> createBillMulti(@RequestBody BillCreateMultiInputData inputData) {
+        // FIXME: 2020/8/24 make a service method for this
         Integer payerUid = inputData.getPayerUid();
         List<Integer> payeeUids = inputData.getPayeeUids();
         Double totalBalance = inputData.getTotalBalance();
@@ -168,7 +165,6 @@ public class BillController {
         bill.setStatus(true);
         bill.setDoneTime(new Date());
         billService.updateBill(id, bill);
-        log.info("[payBillSingle][success, paid bill #{}]", id);
         return CommonResult.success(bill);
     }
 
@@ -176,6 +172,7 @@ public class BillController {
     @PostMapping("/pay/multi")
     @ResponseBody
     public CommonResult<Object> payBillMulti(@RequestBody BillIdMultiInputData inputData) {
+        // FIXME: 2020/8/24 make a service method for this
         List<Long> ids = inputData.getIds().stream().distinct().collect(Collectors.toList());
         for (var id : ids) {
             Bill bill = billService.getBill(id);
@@ -203,10 +200,8 @@ public class BillController {
     public CommonResult<Bill> deleteBill(@PathVariable("id") Long id) {
         Bill bill = billService.getBill(id);
         if (billService.deleteBill(id) != 1) {
-            log.error("[deleteBill][failed, bill #{} not found]", id);
             return CommonResult.failed("bill not found");
         }
-        log.info("[deleteBill][success, delete bill #{}]", id);
         return CommonResult.success(bill);
     }
 }

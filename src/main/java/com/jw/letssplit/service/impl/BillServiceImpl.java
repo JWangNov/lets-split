@@ -47,7 +47,13 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public int deleteBill(Long id) {
-        return billMapper.deleteByPrimaryKey(id);
+        int count = billMapper.deleteByPrimaryKey(id);
+        if (count != 1) {
+            log.error("[deleteBill][failed, bill #{} not found]", id);
+        } else {
+            log.info("[deleteBill][success, delete bill #{}]", id);
+        }
+        return count;
     }
 
     @Transactional
@@ -63,14 +69,19 @@ public class BillServiceImpl implements BillService {
         return count;
     }
 
+    @Transactional
     @Override
     public int createBill(Bill bill) {
-        return billMapper.insertSelective(bill);
+        long id = billMapper.insertSelective(bill);
+        log.info("[createBillSingle][success, create single bill, id: {}]", id);
+        return (int) id;
     }
 
+    @Transactional
     @Override
     public int updateBill(Long id, Bill bill) {
         bill.setId(id);
+        log.info("[updateBill][success, bill #{}]", id);
         return billMapper.updateByPrimaryKeySelective(bill);
     }
 }
