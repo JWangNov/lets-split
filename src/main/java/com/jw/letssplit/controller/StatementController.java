@@ -38,7 +38,6 @@ public class StatementController {
     public CommonResult<StatementBrief> getBriefStatement(@PathVariable("uid") Integer uid) {
         User user = userService.getUser(uid);
         if (user == null) {
-            log.error("[getBriefStatement][failed, user #{} not found]", uid);
             return CommonResult.failed("user not found");
         }
         StatementBrief statement = new StatementBrief();
@@ -55,7 +54,6 @@ public class StatementController {
             );
         }
         statement.setPayeeBalanceMap(payeeBalanceMap);
-        log.info("[getBriefStatement][success]");
         return CommonResult.success(statement);
     }
 }
