@@ -46,7 +46,6 @@ public class BillController {
     public CommonResult<List<Bill>> listUserBill(@PathVariable("uid") Integer uid) {
         User user = userService.getUser(uid);
         if (user == null) {
-            log.error("[listUserBill][failed, user not found, uid: {}]", uid);
             return CommonResult.failed("user not found");
         }
         return CommonResult.success(billService.listBillOfUser(uid));
@@ -58,7 +57,6 @@ public class BillController {
     public CommonResult<List<Bill>> listUserBillUnpaid(@PathVariable("uid") Integer uid) {
         User user = userService.getUser(uid);
         if (user == null) {
-            log.error("[listUserBillUnpaid][failed, user not found, uid: {}]", uid);
             return CommonResult.failed("user not found");
         }
         return CommonResult.success(billService.listUnpaidBillOfUser(uid));
@@ -73,13 +71,12 @@ public class BillController {
         User userPayee = userService.getUser(inputBill.getUid());
         User userPayer = userService.getUser(inputBill.getPaidByUid());
         if (userPayee == null || userPayer == null) {
-            log.error("[createBillSingle][failed, user not found, input uid: {}]",
-                    userPayee == null ? inputBill.getUid() : inputBill.getPaidByUid());
+            // log.error("[createBillSingle][failed, user not found, input uid: {}]",
+            //         userPayee == null ? inputBill.getUid() : inputBill.getPaidByUid());
             return CommonResult.failed("user not found");
         }
         if (inputBill.getBalance() < 0) {
-            log.error("[createBillSingle][failed, balance should be >= 0, input balance: {}]", inputBill.getBalance());
-            return CommonResult.failed("balance incorrect");
+            return CommonResult.failed("balance incorrect, balance should >= 0");
         }
 
         Bill bill = new Bill();
@@ -155,12 +152,10 @@ public class BillController {
     public CommonResult<Bill> payBillSingle(@RequestBody Long id) {
         Bill bill = billService.getBill(id);
         if (bill == null) {
-            log.error("[payBillSingle][failed, bill #{} not found]", id);
             return CommonResult.failed("bill not found");
         }
         if (bill.getStatus()) {
-            log.error("[payBillSingle][failed, cannot repay a paid bill #{}]", id);
-            return CommonResult.failed("cannot repay a paid bill");
+            return CommonResult.failed("this bill is already paid");
         }
         bill.setStatus(true);
         bill.setDoneTime(new Date());
