@@ -7,6 +7,7 @@ import com.jw.letssplit.service.BillService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -49,9 +50,16 @@ public class BillServiceImpl implements BillService {
         return billMapper.deleteByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public void deleteBill(List<Long> ids) {
-        ids.forEach(this::deleteBill);
+        int count = 0;
+        for (Long id : ids) {
+            count += billMapper.deleteByPrimaryKey(id);
+        }
+        if (count != ids.size()) {
+            throw new RuntimeException();
+        }
     }
 
     @Override
