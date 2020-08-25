@@ -29,7 +29,7 @@ public class UserController {
         User user = new User();
         user.setUsername(username);
         int id = userService.createUser(user);
-        log.info("[createUser][success, username {}, id {}]", username, id);
+        user.setId(id);
         return CommonResult.success(user);
     }
 
@@ -37,7 +37,6 @@ public class UserController {
     @GetMapping("/list")
     @ResponseBody
     public CommonResult<List<User>> listAllUser() {
-        log.info("[listAllUser][success]");
         return CommonResult.success(userService.listAllUser());
     }
 
@@ -47,10 +46,8 @@ public class UserController {
     public CommonResult<User> renameUser(@RequestBody User user) {
         int count = userService.updateUser(user.getId(), user);
         if (count != 1) {
-            log.error("[renameUser][failed, cannot find user id: {}]", user.getId());
             return CommonResult.failed("user not found");
         }
-        log.info("[renameUser][success, id: {}]", user.getId());
         return CommonResult.success(user);
     }
 
@@ -60,10 +57,8 @@ public class UserController {
     public CommonResult<Object> deleteUser(@PathVariable("id") Integer id) {
         int count = userService.deleteUser(id);
         if (count != 1) {
-            log.error("[deleteUser][failed, cannot find user id: {}]", id);
             return CommonResult.failed("user not found");
         }
-        log.info("[deleteUser][success, id: {}]", id);
         return CommonResult.success(null);
     }
 }
