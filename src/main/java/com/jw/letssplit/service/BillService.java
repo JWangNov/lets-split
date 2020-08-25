@@ -21,7 +21,7 @@ public interface BillService {
 
     int deleteBill(Long id);
 
-    void deleteBill(List<Long> ids);
+    long deleteBill(List<Long> ids);
 
     int createBill(Bill bill);
 

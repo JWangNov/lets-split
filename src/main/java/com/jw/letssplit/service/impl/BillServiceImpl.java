@@ -52,14 +52,15 @@ public class BillServiceImpl implements BillService {
 
     @Transactional
     @Override
-    public void deleteBill(List<Long> ids) {
-        int count = 0;
+    public long deleteBill(List<Long> ids) {
+        long count = 0;
         for (Long id : ids) {
             count += billMapper.deleteByPrimaryKey(id);
         }
         if (count != ids.size()) {
             throw new RuntimeException();
         }
+        return count;
     }
 
     @Override
