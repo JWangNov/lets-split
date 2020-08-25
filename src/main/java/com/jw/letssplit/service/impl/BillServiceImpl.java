@@ -45,6 +45,7 @@ public class BillServiceImpl implements BillService {
         return billMapper.selectByPrimaryKey(id);
     }
 
+    @Transactional
     @Override
     public int deleteBill(Long id) {
         int count = billMapper.deleteByPrimaryKey(id);
